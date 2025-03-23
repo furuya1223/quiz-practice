@@ -1,0 +1,11 @@
+{
+  "voicepeak_path": "C:\\Program Files\\VoicePeak\\VoicePeak.exe",
+  "voicepeak_speaker": "Koharu Rikka",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 50021
+  },
+  "http_server": {
+    "port": 8000
+  }
+}

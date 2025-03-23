@@ -1,0 +1,130 @@
+/* 全体の基本設定 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* コンテナ */
+.container {
+    width: 80%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+/* 見出し */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* クイズエリア */
+.quiz-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#question-area {
+    min-height: 100px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+    border-radius: 8px;
+    font-size: 18px;
+    overflow-y: auto;
+}
+
+/* ✅ 初期状態で薄くするスタイル */
+#question-area.placeholder-text {
+    color: #999;
+}
+
+/* ✅ 実際の問題や解答を表示するときは色を元に戻す */
+#question-area {
+    color: #222;
+}
+
+/* ボタン */
+button {
+    padding: 12px;
+    border: none;
+    background-color: #5c67f2;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #5058e3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* ✅ 音量調整エリア */
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.volume-icon {
+    font-size: 24px;
+    color: #5c67f2;
+}
+
+/* ✅ スライダーの色をボタンと統一 */
+#volume-slider {
+    width: 100%;
+    accent-color: #5c67f2; /* ✅ ボタンと色を統一 */
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 4px;
+    background: #e0e0e0;
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+/* ✅ スライダーのつまみ (Webkit用) */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background-color: #5c67f2;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* ✅ スライダーのつまみ (Mozilla用) */
+#volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background-color: #5c67f2;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* ✅ スライダーにホバー時のエフェクト */
+#volume-slider:hover {
+    background-color: #d0d0d0;
+}
+
+#volume-slider:focus {
+    outline: none;
+}
