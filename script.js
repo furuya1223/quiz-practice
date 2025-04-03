@@ -65,7 +65,7 @@ async function fetchTSV(file) {
     const FILE_URL = `./questions/${file}`;
 
     try {
-        const response = await fetch(FILE_URL, {cache: "no-store"});
+        const response = await fetch(FILE_URL, { cache: "no-store" });
         if (!response.ok) throw new Error(`ファイル読み込みエラー: ${response.status}`);
 
         const text = await response.text();
