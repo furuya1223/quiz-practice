@@ -17,7 +17,7 @@ body {
     background-color: #fff;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
 }
 
@@ -91,7 +91,8 @@ button:disabled {
 /* ✅ スライダーの色をボタンと統一 */
 #volume-slider {
     width: 100%;
-    accent-color: #5c67f2; /* ✅ ボタンと色を統一 */
+    accent-color: #5c67f2;
+    /* ✅ ボタンと色を統一 */
     -webkit-appearance: none;
     height: 6px;
     border-radius: 4px;

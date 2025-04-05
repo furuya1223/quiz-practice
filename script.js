@@ -7,7 +7,6 @@ const volumeLabel = document.getElementById('volume-label');
 
 let config = {};
 let quizData = [];
-let replaceTable = {};
 let currentQuestion = null;
 let nextQuestion = null;
 let prevAudioUrl = null;
@@ -24,36 +23,14 @@ async function loadConfig() {
     console.log('設定読み込み完了:', config);
 }
 
-// 置換用TSVファイルを読み込み
-async function loadReplaceTable() {
-    const REPLACE_URL = './replace_data.tsv';
-
-    try {
-        const response = await fetch(REPLACE_URL);
-        if (!response.ok) throw new Error(`置換データ読み込み失敗: ${response.status}`);
-
-        const text = await response.text();
-        const rows = text.trim().split('\n');
-
-        for (const row of rows) {
-            const [original, replacement] = row.split('\t');
-            if (original && replacement) {
-                replaceTable[original] = replacement;
-            }
-        }
-        console.log(`置換データを ${Object.keys(replaceTable).length} 件読み込みました`);
-    } catch (error) {
-        console.error(`❌ 置換データ読み込み失敗: ${error}`);
-    }
+// 表示用： [表示|読み] → 表示
+function extractDisplayText(text) {
+    return text.replace(/\[([^\|\[\]]+)\|([^\[\]]+)\]/g, '$1');
 }
 
-// 文字列を置換する関数
-function applyTextReplacement(text) {
-    for (const [original, replacement] of Object.entries(replaceTable)) {
-        const regex = new RegExp(original, 'g'); // 正規表現で一括置換
-        text = text.replace(regex, replacement);
-    }
-    return text;
+// 合成用： [表示|読み] → 読み
+function extractReadingText(text) {
+    return text.replace(/\[([^\|\[\]]+)\|([^\[\]]+)\]/g, '$2');
 }
 
 // TSVファイル一覧を取得
@@ -88,7 +65,7 @@ async function fetchTSV(file) {
     const FILE_URL = `./questions/${file}`;
 
     try {
-        const response = await fetch(FILE_URL);
+        const response = await fetch(FILE_URL, { cache: "no-store" });
         if (!response.ok) throw new Error(`ファイル読み込みエラー: ${response.status}`);
 
         const text = await response.text();
@@ -144,7 +121,6 @@ function playAudio() {
 
 // 音声合成リクエスト (クライアントがファイル名を指定)
 async function synthesizeQuestion(question, filename) {
-    const replacedText = applyTextReplacement(question);
     const VOICEPEAK_URL = `http://localhost:${config.server.port}/synthesize`;
 
     await fetch(VOICEPEAK_URL, {
@@ -206,8 +182,8 @@ async function preloadNextQuestion() {
 
         isAudioReady = false; // 音声合成フラグをリセット
 
-        // 非同期で音声合成開始
-        synthesizeQuestion("問題。" + nextQuestion.question, filename);
+        // 非同期で音声合成開始const rawText = currentQuestion.question;
+        synthesizeQuestion("問題。" + extractReadingText(nextQuestion.question), filename);
 
         // 🔄 ポーリングでファイル確認
         const interval = setInterval(async () => {
@@ -307,7 +283,6 @@ nextQuestionBtn.addEventListener('click', handleNextQuestion);
 window.onload = async () => {
     console.log("🚀 アプリ起動");
     await loadConfig();
-    await loadReplaceTable();
     await cleanupAudioFiles();
     await loadTSVFiles(); // クイズデータの読み込みが完了するまで待つ
     await preloadNextQuestion(); // 読み込み完了後に音声合成を開始
@@ -334,7 +309,7 @@ showAnswerBtn.addEventListener('click', () => {
 
         // innerHTML でリンクを生成
         questionArea.innerHTML = `
-            <p>問題: ${currentQuestion.question}</p>
+            <p>問題: ${extractDisplayText(currentQuestion.question)}</p>
             <p>
                 解答: ${currentQuestion.answer}
                 （<a href="${googleSearchUrl}" target="_blank" rel="noopener noreferrer">Google検索</a>）
